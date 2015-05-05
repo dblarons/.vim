@@ -24,7 +24,7 @@ Plugin 'tpope/vim-obsession'
 Plugin 'scrooloose/syntastic'
 
 "Haskell syntax
-"Plugin 'dag/vim2hs'
+Plugin 'dag/vim2hs'
 
 " " All of your Plugins must be added before the following line
 
@@ -34,6 +34,8 @@ filetype plugin indent on    " required
 syntax enable
 
 autocmd BufNewFile,BufReadPost *.tpp set filetype=cpp
+autocmd BufNewFile,BufReadPost *.cxx set filetype=cpp
+autocmd BufNewFile,BufReadPost *.txx set filetype=cpp
 
 filetype on "Can set filetype back to on after vundle init
 filetype indent on "fix bad indentation of '#' in python
@@ -55,8 +57,10 @@ let delimitMate_expand_space = 1
 let delimitMate_jump_expansion = 1
 
 "Set up vim2hs configurations
+"There are also Haskell configs in ~/.vim/ftplugins/haskell.vim
 let g:haskell_conceal = 0
 let g:haskell_conceal_enumerations = 0
+
 
 "Display current cursor position in lower right corner.
 set ruler
@@ -66,6 +70,9 @@ let mapleader = ","
 
 "Set the correct python so that YouCompleteMe doesn't complain
 let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+
+"Close the YCM preview buffer after completion
+let g:ycm_autoclose_preview_window_after_completion = 1
 
 
 "Ever notice a slight lag after typing the leader key + command? This lowers
@@ -149,14 +156,14 @@ set go-=T
 "Hard-wrap paragraphs of text
 nnoremap <leader>q gqip
 
-"Enable code folding
-set foldenable
-
 "Hide mouse when typing
 set mousehide
 
 "Opens a vertical split and switches over (\v)
 nnoremap <leader>v <C-w>v<C-w>l
+
+"Closes a buffer in a vertical split without closing the split
+nnoremap <leader>c :bp\|bd #<CR>
 
 "Split windows below the current window.
 set splitbelow              
@@ -165,10 +172,7 @@ set splitbelow
 "set clipboard=unnamed
 
 " session settings
-set sessionoptions=resize,winpos,winsize,buffers,tabpages,folds,curdir,help
-
-"Faster shortcut for commenting. Requires T-Comment plugin
-map <leader>c <c-_><c-_>
+set sessionoptions=resize,winpos,winsize,buffers,tabpages,curdir,help
 
 "Saves time; maps the spacebar to colon
 nmap <space> :
@@ -176,8 +180,14 @@ nmap <space> :
 "Automatically change current directory to that of the file in the buffer
 autocmd BufEnter * cd %:p:h
 
+"Map escape to jk
+imap jk <Esc>
+
 "Map code completion to , + tab
 imap <leader><tab> <C-x><C-o>
+
+"Map folding/unfolding of individual section from za to ,a
+nmap <leader>f za
 
 " More useful command-line completion
 set wildmenu
@@ -212,7 +222,7 @@ endif
 :nmap <leader>s :source $MYVIMRC
 
 ":e $MYVIMRC opens the .vimrc for editing
-:nmap <leader>v :e $MYVIMRC
+:nmap <leader>e :e $MYVIMRC
 
 " easier window navigation
 nmap <C-h> <C-w>h
