@@ -11,14 +11,14 @@ Plugin 'gmarik/Vundle.vim'
 "Autocomplete
 Plugin 'Valloric/YouCompleteMe'
 
+"Generates .ycm_extra_conf.py files with the :YcmGenerateConfig command.
+Plugin 'rdnetto/YCM-Generator'
+
 " solarized theme
 Plugin 'altercation/vim-colors-solarized'
 
 "Autocomplete brackets, braces, and quotes
 Plugin 'Raimondi/delimitMate'
-
-"Session restore - used for tmux-resurrect to restore Vim sessions
-Plugin 'tpope/vim-obsession'
 
 "Syntax checking
 Plugin 'scrooloose/syntastic'
@@ -26,7 +26,32 @@ Plugin 'scrooloose/syntastic'
 "Haskell syntax
 Plugin 'dag/vim2hs'
 
-" " All of your Plugins must be added before the following line
+"Org Mode
+Plugin 'jceb/vim-orgmode'
+
+"RepeatVim
+Plugin 'tpope/vim-repeat'
+
+"HSpec Syntax
+Plugin 'hspec/hspec.vim'
+
+"JavaScript syntax
+Plugin 'pangloss/vim-javascript'
+
+"JSX syntax
+Plugin 'mxw/vim-jsx'
+
+"Omnicompletion support for JavaScript that hooks into YCM
+Plugin 'marijnh/tern_for_vim'
+
+"Tree explorer
+Plugin 'scrooloose/nerdtree'
+
+"Note :: Install linting plugins globally so that they hook into Syntastic
+" rather than installing them through Vundle, which will conflict with
+" YouCompleteMe and cause weird buffer issues.
+
+" All of your Plugins must be added before the following line
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -67,6 +92,7 @@ set ruler
 
 "Want a different map leader than \
 let mapleader = ","
+let maplocalleader = "\\"
 
 "Set the correct python so that YouCompleteMe doesn't complain
 let g:ycm_path_to_python_interpreter = '/usr/bin/python'
@@ -74,10 +100,9 @@ let g:ycm_path_to_python_interpreter = '/usr/bin/python'
 "Close the YCM preview buffer after completion
 let g:ycm_autoclose_preview_window_after_completion = 1
 
-
 "Ever notice a slight lag after typing the leader key + command? This lowers
 "the timeout.
-set timeoutlen=200
+set timeoutlen=1000
 
 "Switch between buffers without saving
 set hidden
@@ -135,7 +160,7 @@ set linespace=-2
 "Better line wrapping 
 set wrap
 set textwidth=79
-set formatoptions=qrn1
+set formatoptions=qrn1t
 
 "No beeping
 set visualbell
@@ -163,13 +188,10 @@ set mousehide
 nnoremap <leader>v <C-w>v<C-w>l
 
 "Closes a buffer in a vertical split without closing the split
-nnoremap <leader>c :bp\|bd #<CR>
+nnoremap <leader>d :bp\|bd #<CR>
 
 "Split windows below the current window.
 set splitbelow              
-
-"Allow system clipboard to be accessed
-"set clipboard=unnamed
 
 " session settings
 set sessionoptions=resize,winpos,winsize,buffers,tabpages,curdir,help
@@ -182,9 +204,6 @@ autocmd BufEnter * cd %:p:h
 
 "Map escape to jk
 imap jk <Esc>
-
-"Map code completion to , + tab
-imap <leader><tab> <C-x><C-o>
 
 "Map folding/unfolding of individual section from za to ,a
 nmap <leader>f za
@@ -242,11 +261,30 @@ set backupdir=~/.vim/tmp/backup// " backups
 set directory=~/.vim/tmp/swap// " swap files
 set backup " enable backup
 
-" No more stretching for navigating files
-"noremap h ;
-"noremap j h
-"noremap k gj
-"noremap l gk
-"noremap ; l
+" Keep the cursor n lines from the edge of the buffer.
+set scrolloff=10
+
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign))
 
 set showmatch " show matching brackets
+
+" SML Prompt Loader – Opens an SML buffer and loads the current SML file into
+" that buffer.
+autocmd FileType sml command Sml !sml '%'
+
+" Python prompt loader
+autocmd FileType python command Py !python '%'
+
+" JavaScript indentation should be 2 instead of 4
+autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+
+" Start NERDTree if no files are specified when Vim starts.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Start NERDTree with Ctrl-n
+map <C-n> :NERDTreeToggle<CR>
