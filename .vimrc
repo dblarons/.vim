@@ -29,6 +29,9 @@ Plugin 'dag/vim2hs'
 "Org Mode
 Plugin 'jceb/vim-orgmode'
 
+"Speeddating – required for org mode
+Plugin 'tpope/vim-speeddating'
+
 "RepeatVim
 Plugin 'tpope/vim-repeat'
 
@@ -46,6 +49,15 @@ Plugin 'marijnh/tern_for_vim'
 
 "Tree explorer
 Plugin 'scrooloose/nerdtree'
+
+"Close Vim tags
+Plugin 'alvan/vim-closetag'
+
+"Search for files in the working directory
+Plugin 'ctrlpvim/ctrlp.vim'
+
+"Cycle through yanked text similar to Emacs killring
+Plugin 'maxbrunsfeld/vim-yankstack'
 
 "Note :: Install linting plugins globally so that they hook into Syntastic
 " rather than installing them through Vundle, which will conflict with
@@ -74,6 +86,12 @@ set autowrite
 
 "Enable ctrlp
 let g:ctrlp_map = '<c-p>'
+
+" ,b should open Ctrl-P buffer
+nmap <leader>b :CtrlPBuffer <Enter>
+
+"Ignore annoying dirs in Ctrl-P
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 
 "Set up delimitMate configurations
 let delimitMate_balance_matchpairs = 1
@@ -254,7 +272,7 @@ nnoremap Q <nop>
 
 " Shortcut to opening a virtual split to right of current pane
 " Makes more sense than opening to the left
-nmap <leader>bv :bel vsp
+" nmap <leader>bv :bel vsp
 
 " Backups
 set backupdir=~/.vim/tmp/backup// " backups
@@ -288,3 +306,12 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Start NERDTree with Ctrl-n
 map <C-n> :NERDTreeToggle<CR>
+
+" Needed for closetag.vim plugin
+" filenames like *.xml, *.html, *.xhtml, ...
+let g:closetag_filenames = "*.html,*.xhtml,*.xml,*.jsx"
+
+" Yankstack configuration
+let g:yankstack_map_keys = 0 " remove old mappings
+nmap <leader>p <Plug>yankstack_substitute_older_paste
+nmap <leader>P <Plug>yankstack_substitute_newer_paste
