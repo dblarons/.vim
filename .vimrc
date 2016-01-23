@@ -88,7 +88,7 @@ set autowrite
 let g:ctrlp_map = '<c-p>'
 
 " ,b should open Ctrl-P buffer
-nmap <leader>b :CtrlPBuffer <Enter>
+nmap <leader>b :CtrlPBuffer<CR>
 
 "Ignore annoying dirs in Ctrl-P
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
@@ -103,7 +103,6 @@ let delimitMate_jump_expansion = 1
 "There are also Haskell configs in ~/.vim/ftplugins/haskell.vim
 let g:haskell_conceal = 0
 let g:haskell_conceal_enumerations = 0
-
 
 "Display current cursor position in lower right corner.
 set ruler
@@ -160,13 +159,13 @@ set shiftwidth=4
 set softtabstop=4
 
 "Allow many types of line endings
-set fileformats=unix,mac,dos 
+set fileformats=unix,mac,dos
 
 "Show command in bottom right portion of the screen
 set showcmd
 
 "Indent stuff
-set smartindent
+"set smartindent " De-indents Python comments. Remove if still commented out.
 set autoindent
 
 "Always show the status line
@@ -175,7 +174,7 @@ set laststatus=2
 "Prefer a slightly higher line height
 set linespace=-2
 
-"Better line wrapping 
+"Better line wrapping
 set wrap
 set textwidth=79
 set formatoptions=qrn1t
@@ -202,6 +201,9 @@ nnoremap <leader>q gqip
 "Hide mouse when typing
 set mousehide
 
+"Allow mouse use in vim
+set mouse=a
+
 "Opens a vertical split and switches over (\v)
 nnoremap <leader>v <C-w>v<C-w>l
 
@@ -209,7 +211,7 @@ nnoremap <leader>v <C-w>v<C-w>l
 nnoremap <leader>d :bp\|bd #<CR>
 
 "Split windows below the current window.
-set splitbelow              
+set splitbelow
 
 " session settings
 set sessionoptions=resize,winpos,winsize,buffers,tabpages,curdir,help
@@ -220,11 +222,20 @@ nmap <space> :
 "Automatically change current directory to that of the file in the buffer
 autocmd BufEnter * cd %:p:h
 
+"Copying in Vim copies to system clipboard
+set clipboard=unnamed
+
 "Map escape to jk
 imap jk <Esc>
 
 "Map folding/unfolding of individual section from za to ,a
 nmap <leader>f za
+
+"Toggle all folds beneath this point
+nmap <leader>F zA
+
+"Toggle foldeable on and off
+nmap <leader>i zi
 
 " More useful command-line completion
 set wildmenu
@@ -241,7 +252,7 @@ nmap <C-Up> ddkP
 nmap <C-Down> ddp
 
 "remove right-hand scroll bar
-:set guioptions-=r 
+:set guioptions-=r
 
 "Bubble multiple lines
 vmap <C-Up> xkP`[V`]
@@ -290,13 +301,6 @@ nmap ga <Plug>(EasyAlign))
 
 set showmatch " show matching brackets
 
-" SML Prompt Loader – Opens an SML buffer and loads the current SML file into
-" that buffer.
-autocmd FileType sml command Sml !sml '%'
-
-" Python prompt loader
-autocmd FileType python command Py !python '%'
-
 " JavaScript indentation should be 2 instead of 4
 autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
 
@@ -307,6 +311,9 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " Start NERDTree with Ctrl-n
 map <C-n> :NERDTreeToggle<CR>
 
+" Reveal current file in NerdTree
+nmap <leader>n :NERDTreeFind<CR>
+
 " Needed for closetag.vim plugin
 " filenames like *.xml, *.html, *.xhtml, ...
 let g:closetag_filenames = "*.html,*.xhtml,*.xml,*.jsx"
@@ -315,3 +322,16 @@ let g:closetag_filenames = "*.html,*.xhtml,*.xml,*.jsx"
 let g:yankstack_map_keys = 0 " remove old mappings
 nmap <leader>p <Plug>yankstack_substitute_older_paste
 nmap <leader>P <Plug>yankstack_substitute_newer_paste
+
+" Configure Syntastic to use ESLint
+let g:syntastic_javascript_checkers = ['eslint']
+
+fun! <SID>StripTrailingWhitespaces()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
+endfun
+
+" Strip trailing whitespace on each save
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
