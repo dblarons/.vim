@@ -87,9 +87,6 @@ set autowrite
 "Enable ctrlp
 let g:ctrlp_map = '<c-p>'
 
-" ,b should open Ctrl-P buffer
-nmap <leader>b :CtrlPBuffer<CR>
-
 "Ignore annoying dirs in Ctrl-P
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 
@@ -251,6 +248,9 @@ nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
 nmap <C-Up> ddkP
 nmap <C-Down> ddp
 
+" ,b should open Ctrl-P buffer
+nmap <leader>b :CtrlPBuffer<CR>
+
 "remove right-hand scroll bar
 :set guioptions-=r
 
@@ -305,8 +305,8 @@ set showmatch " show matching brackets
 autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
 
 " Start NERDTree if no files are specified when Vim starts.
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Start NERDTree with Ctrl-n
 map <C-n> :NERDTreeToggle<CR>
