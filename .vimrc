@@ -314,6 +314,9 @@ map <C-n> :NERDTreeToggle<CR>
 " Reveal current file in NerdTree
 nmap <leader>n :NERDTreeFind<CR>
 
+" Close NERDTree upon opening a file
+let NERDTreeQuitOnOpen=1
+
 " Needed for closetag.vim plugin
 " filenames like *.xml, *.html, *.xhtml, ...
 let g:closetag_filenames = "*.html,*.xhtml,*.xml,*.jsx"
