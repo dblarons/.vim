@@ -59,6 +59,12 @@ Plugin 'ctrlpvim/ctrlp.vim'
 "Cycle through yanked text similar to Emacs killring
 Plugin 'maxbrunsfeld/vim-yankstack'
 
+"Ag commands (similar to built in grep ones)
+Plugin 'rking/ag.vim'
+
+"Ag shortcuts (gagiw searches a word; gagi' searches the words inside single quotes)
+Plugin 'Chun-Yang/vim-action-ag'
+
 "Note :: Install linting plugins globally so that they hook into Syntastic
 " rather than installing them through Vundle, which will conflict with
 " YouCompleteMe and cause weird buffer issues.
@@ -328,6 +334,9 @@ nmap <leader>P <Plug>yankstack_substitute_newer_paste
 
 " Configure Syntastic to use ESLint
 let g:syntastic_javascript_checkers = ['eslint']
+
+" Make ag.vim search from the project root instead of working dir
+let g:ag_working_path_mode="r"
 
 fun! <SID>StripTrailingWhitespaces()
     let l = line(".")
