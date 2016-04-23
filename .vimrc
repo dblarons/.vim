@@ -65,6 +65,12 @@ Plugin 'rking/ag.vim'
 "Ag shortcuts (gagiw searches a word; gagi' searches the words inside single quotes)
 Plugin 'Chun-Yang/vim-action-ag'
 
+"Stylus syntax highlighting
+Plugin 'wavded/vim-stylus'
+
+" Syntax highlighting for elm
+Plugin 'lambdatoast/elm.vim'
+
 "Note :: Install linting plugins globally so that they hook into Syntastic
 " rather than installing them through Vundle, which will conflict with
 " YouCompleteMe and cause weird buffer issues.
@@ -227,9 +233,6 @@ autocmd BufEnter * cd %:p:h
 
 "Copying in Vim copies to system clipboard
 set clipboard=unnamed
-
-"Map escape to jk
-imap jk <Esc>
 
 "Map folding/unfolding of individual section from za to ,a
 nmap <leader>f za
