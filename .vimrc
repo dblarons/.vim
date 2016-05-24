@@ -326,6 +326,9 @@ nmap <leader>n :NERDTreeFind<CR>
 " Close NERDTree upon opening a file
 let NERDTreeQuitOnOpen=1
 
+" Ignore files in NERDTree viewer
+let NERDTreeIgnore = ['\.pyc$']
+
 " Needed for closetag.vim plugin
 " filenames like *.xml, *.html, *.xhtml, ...
 let g:closetag_filenames = "*.html,*.xhtml,*.xml,*.jsx"
