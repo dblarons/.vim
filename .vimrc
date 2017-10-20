@@ -23,6 +23,9 @@ Plugin 'Raimondi/delimitMate'
 "Syntax checking
 Plugin 'scrooloose/syntastic'
 
+"Use local eslint install by default
+Plugin 'mtscout6/syntastic-local-eslint.vim'
+
 "Haskell syntax
 Plugin 'dag/vim2hs'
 
@@ -45,7 +48,7 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 
 "Omnicompletion support for JavaScript that hooks into YCM
-Plugin 'marijnh/tern_for_vim'
+Plugin 'ternjs/tern_for_vim'
 
 "Tree explorer
 Plugin 'scrooloose/nerdtree'
@@ -56,9 +59,6 @@ Plugin 'alvan/vim-closetag'
 "Search for files in the working directory
 Plugin 'ctrlpvim/ctrlp.vim'
 
-"Cycle through yanked text similar to Emacs killring
-Plugin 'maxbrunsfeld/vim-yankstack'
-
 "Ag commands (similar to built in grep ones)
 Plugin 'rking/ag.vim'
 
@@ -68,8 +68,18 @@ Plugin 'Chun-Yang/vim-action-ag'
 "Stylus syntax highlighting
 Plugin 'wavded/vim-stylus'
 
-" Syntax highlighting for elm
+"Syntax highlighting for elm
 Plugin 'lambdatoast/elm.vim'
+
+"Show git diffs in the gutter
+Plugin 'airblade/vim-gitgutter'
+
+"Typescript syntax highlighting
+Plugin 'leafgarland/typescript-vim'
+
+Plugin 'SirVer/ultisnips'
+
+Plugin 'honza/vim-snippets'
 
 "Note :: Install linting plugins globally so that they hook into Syntastic
 " rather than installing them through Vundle, which will conflict with
@@ -120,8 +130,14 @@ set ruler
 let mapleader = ","
 let maplocalleader = "\\"
 
+"Configure Syntastic to use ESLint
+let g:syntastic_javascript_checkers = ['eslint']
+
 "Set the correct python so that YouCompleteMe doesn't complain
-let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+let g:ycm_server_python_interpreter = '/usr/local/bin/python'
+
+"Set a single global .ycm_extra_conf.py instead of one per project
+let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 "Close the YCM preview buffer after completion
 let g:ycm_autoclose_preview_window_after_completion = 1
@@ -148,9 +164,10 @@ if has("gui_running")
       set guifont=Inconsolata-dz\ for\ Powerline:h13
    endif
 else
-   let g:solarized_termtrans = 1
-   set background=dark
+   let g:solarized_visibility = "high"
+   let g:solarized_contrast = "high"
    colorscheme solarized
+   set background=dark
    set guifont=Inconsolata-dz\ for\ Powerline:h13
 endif
 
@@ -174,7 +191,6 @@ set fileformats=unix,mac,dos
 set showcmd
 
 "Indent stuff
-"set smartindent " De-indents Python comments. Remove if still commented out.
 set autoindent
 
 "Always show the status line
@@ -213,6 +229,9 @@ set mousehide
 "Allow mouse use in vim
 set mouse=a
 
+"Set a stronger encryption method than the default
+set cm=blowfish2
+
 "Opens a vertical split and switches over (\v)
 nnoremap <leader>v <C-w>v<C-w>l
 
@@ -248,6 +267,9 @@ set wildmenu
 
 "Auto-completion menu
 set wildmode=list:longest
+
+"Make backspace work like most other apps
+set backspace=indent,eol,start
 
 "Delete all buffers (via Derek Wyatt)
 nmap <silent> ,da :exec "1," . bufnr('$') . "bd"<cr>
@@ -310,12 +332,12 @@ nmap ga <Plug>(EasyAlign))
 
 set showmatch " show matching brackets
 
-" JavaScript indentation should be 2 instead of 4
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+" Enable syntax highlighting for jsdocs
+let g:javascript_plugin_jsdoc = 1
 
-" Start NERDTree if no files are specified when Vim starts.
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" Enable concealing characters through vim-javascript
+set cole=1
+let g:javascript_conceal_function = "ƒ"
 
 " Start NERDTree with Ctrl-n
 map <C-n> :NERDTreeToggle<CR>
@@ -333,16 +355,12 @@ let NERDTreeIgnore = ['\.pyc$']
 " filenames like *.xml, *.html, *.xhtml, ...
 let g:closetag_filenames = "*.html,*.xhtml,*.xml,*.jsx"
 
-" Yankstack configuration
-let g:yankstack_map_keys = 0 " remove old mappings
-nmap <leader>p <Plug>yankstack_substitute_older_paste
-nmap <leader>P <Plug>yankstack_substitute_newer_paste
-
-" Configure Syntastic to use ESLint
-let g:syntastic_javascript_checkers = ['eslint']
-
 " Make ag.vim search from the project root instead of working dir
 let g:ag_working_path_mode="r"
+
+" Hacky Gitgutter fix for getting rid of weird solarized highlight column
+highlight clear SignColumn
+call gitgutter#highlight#define_highlights()
 
 fun! <SID>StripTrailingWhitespaces()
     let l = line(".")
@@ -353,3 +371,8 @@ endfun
 
 " Strip trailing whitespace on each save
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+
+" Ultisnip trigger configuration. Do not use <tab> if you use YCM.
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-f>"
+let g:UltiSnipsJumpBackwardTrigger="<c-b>"
